@@ -5,6 +5,7 @@ An all-in-one, high-performance, **100% client-side PDF and document processing 
 ![License](https://img.shields.io/badge/Privacy-100%25%20Client--Side-emerald?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-18.2-blue?style=for-the-badge&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-5.1-purple?style=for-the-badge&logo=vite)
+![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel)
 ![Design](https://img.shields.io/badge/Theme-Blue%20%7C%20White%20%7C%20Slate-slate?style=for-the-badge)
 
 ---
@@ -99,6 +100,52 @@ Open your browser and navigate to `http://localhost:3000/`.
 npm run build
 ```
 The optimized production bundle will be generated in the `dist/` directory.
+
+---
+
+## 🌐 Deploy to Vercel
+
+Deploying this app to **Vercel** takes less than a minute. Choose one of the deployment options below:
+
+### Option A: One-Click Deploy Button
+Click the button below to fork and deploy directly to your Vercel account:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fshlelisa%2Fpdf-compresser)
+
+---
+
+### Option B: Deploy via Vercel Dashboard (Git)
+
+1. Push your code to your GitHub repository:
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+   ```
+2. Go to the [Vercel Dashboard](https://vercel.com/dashboard) and click **"Add New..."** → **"Project"**.
+3. Import your GitHub repository (`shlelisa/pdf-compresser`).
+4. Vercel automatically detects **Vite** configuration:
+   * **Framework Preset**: `Vite`
+   * **Build Command**: `npm run build`
+   * **Output Directory**: `dist`
+5. Click **"Deploy"**. Your app will be live on a custom `.vercel.app` URL!
+
+---
+
+### Option C: Deploy via Vercel CLI
+
+1. Install the Vercel CLI globally:
+   ```bash
+   npm i -g vercel
+   ```
+2. Run the deployment command in the project directory:
+   ```bash
+   vercel
+   ```
+3. To deploy directly to production:
+   ```bash
+   vercel --prod
+   ```
 
 ---
 
