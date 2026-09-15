@@ -6,10 +6,18 @@ import CompressionControls from './components/CompressionControls';
 import FileQueue from './components/FileQueue';
 import StatsSummary from './components/StatsSummary';
 import PreviewModal from './components/PreviewModal';
+import PdfMerger from './components/PdfMerger';
+import ImageToPdf from './components/ImageToPdf';
+import PdfWatermark from './components/PdfWatermark';
+import PdfProtect from './components/PdfProtect';
+import PdfSign from './components/PdfSign';
+import DocToPdf from './components/DocToPdf';
+import PdfToDoc from './components/PdfToDoc';
 import { compressPdfFile } from './utils/pdfCompressor';
 import { Play, RotateCcw } from 'lucide-react';
 
 export default function App() {
+  const [activeTool, setActiveTool] = useState('compressor'); // 'compressor' | 'merger' | 'doc_to_pdf' | 'image_to_pdf' | 'sign' | 'watermark' | 'protect'
   const [files, setFiles] = useState([]);
   const [isCompressingAll, setIsCompressingAll] = useState(false);
   const [previewItem, setPreviewItem] = useState(null);
@@ -29,7 +37,7 @@ export default function App() {
   };
 
   const [options, setOptions] = useState({
-    mode: 'target_size', // Default to 'Fit Under 1 MB' cap mode
+    mode: 'target_size',
     targetDpi: 180,
     jpegQuality: 0.78,
     colorMode: 'color',
@@ -137,60 +145,84 @@ export default function App() {
   };
 
   return (
-    <div className="app-layout" style={{ maxWidth: '860px' }}>
-      {/* Header with Theme Toggle */}
-      <Header theme={theme} onToggleTheme={toggleTheme} />
-
-      {/* Upload Zone */}
-      <FileUploader onFilesAdded={handleFilesAdded} />
-
-      {/* Preset Compression Levels */}
-      <CompressionControls options={options} onChangeOptions={setOptions} />
-
-      {/* Primary Action Button */}
-      {files.length > 0 && (
-        <div style={{ display: 'flex', gap: '0.85rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-          <button
-            className="btn btn-primary"
-            onClick={handleCompressAll}
-            disabled={isCompressingAll}
-            style={{ flex: '1 1 220px', padding: '0.9rem 1.5rem', fontSize: '1.05rem' }}
-          >
-            <Play size={20} fill="#ffffff" />
-            <span>{isCompressingAll ? 'Compressing...' : `Compress PDF ${files.length > 1 ? `(${files.length})` : ''}`}</span>
-          </button>
-
-          <button
-            className="btn btn-secondary"
-            onClick={handleClearAll}
-            disabled={isCompressingAll}
-          >
-            <RotateCcw size={16} />
-            <span>Clear</span>
-          </button>
-        </div>
-      )}
-
-      {/* File Queue & Results */}
-      <FileQueue
-        files={files}
-        onRemoveFile={handleRemoveFile}
-        onDownloadFile={handleDownloadFile}
-        onOpenPreview={(item) => setPreviewItem(item)}
-        isCompressingAll={isCompressingAll}
+    <div className="app-layout" style={{ maxWidth: '865px' }}>
+      {/* Header with Tool Selection Tabs */}
+      <Header
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        activeTool={activeTool}
+        onSelectTool={setActiveTool}
       />
 
-      {/* Batch Summary */}
-      <StatsSummary files={files} onDownloadAllZip={handleDownloadAllZip} />
+      {/* Tool 1: PDF Compressor */}
+      {activeTool === 'compressor' && (
+        <>
+          <FileUploader onFilesAdded={handleFilesAdded} />
+          <CompressionControls options={options} onChangeOptions={setOptions} />
 
-      {/* Preview Modal */}
-      {previewItem && (
-        <PreviewModal
-          item={previewItem}
-          options={options}
-          onClose={() => setPreviewItem(null)}
-        />
+          {files.length > 0 && (
+            <div style={{ display: 'flex', gap: '0.85rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+              <button
+                className="btn btn-primary"
+                onClick={handleCompressAll}
+                disabled={isCompressingAll}
+                style={{ flex: '1 1 220px', padding: '0.9rem 1.5rem', fontSize: '1.05rem' }}
+              >
+                <Play size={20} fill="#ffffff" />
+                <span>{isCompressingAll ? 'Compressing...' : `Compress PDF ${files.length > 1 ? `(${files.length})` : ''}`}</span>
+              </button>
+
+              <button
+                className="btn btn-secondary"
+                onClick={handleClearAll}
+                disabled={isCompressingAll}
+              >
+                <RotateCcw size={16} />
+                <span>Clear</span>
+              </button>
+            </div>
+          )}
+
+          <FileQueue
+            files={files}
+            onRemoveFile={handleRemoveFile}
+            onDownloadFile={handleDownloadFile}
+            onOpenPreview={(item) => setPreviewItem(item)}
+            isCompressingAll={isCompressingAll}
+          />
+
+          <StatsSummary files={files} onDownloadAllZip={handleDownloadAllZip} />
+
+          {previewItem && (
+            <PreviewModal
+              item={previewItem}
+              options={options}
+              onClose={() => setPreviewItem(null)}
+            />
+          )}
+        </>
       )}
+
+      {/* Tool 2: PDF Merger & Organizer */}
+      {activeTool === 'merger' && <PdfMerger />}
+
+      {/* Tool 3: Word / Text to PDF Converter */}
+      {activeTool === 'doc_to_pdf' && <DocToPdf />}
+
+      {/* Tool 3b: PDF to Word Converter */}
+      {activeTool === 'pdf_to_doc' && <PdfToDoc />}
+
+      {/* Tool 4: Images to PDF Converter */}
+      {activeTool === 'image_to_pdf' && <ImageToPdf />}
+
+      {/* Tool 5: Digital Signature */}
+      {activeTool === 'sign' && <PdfSign />}
+
+      {/* Tool 6: PDF Watermark & Page Numbers */}
+      {activeTool === 'watermark' && <PdfWatermark />}
+
+      {/* Tool 7: PDF Security & Password Encryption */}
+      {activeTool === 'protect' && <PdfProtect />}
     </div>
   );
 }
